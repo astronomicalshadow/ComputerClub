@@ -1,6 +1,6 @@
 # Tutorial
 **_DO NOT MAKE ANY CHANGES TO THE MAIN BRANCH_**
-## editing
+## Editing
 ### Branches
 - to edit a project please make a new branch
 
