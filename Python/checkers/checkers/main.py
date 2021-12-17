@@ -32,3 +32,9 @@ piecesPos = [[1, 2], [1, 4], [1, 6], [1, 8], # # # # # # # # # #
              [6, 2], [6, 4], [6, 6], [6, 8], # # # # # # # # # #
              [7, 1], [7, 3], [7, 5], [7, 7], # Player 2 Pieces
              [8, 2], [8, 4], [8, 6], [8, 8],]#
+
+
+# taking playerInput
+
+def playerInput():
+         input = input().split("")
