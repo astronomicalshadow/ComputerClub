@@ -5,9 +5,9 @@ board = [[" - ", " - ", " - ", " - ", " - ", " - ", " - ", " - ", " - ", " - "],
          [" | ", "   ", "(9)", "   ", "(A)", "   ", "(B)", "   ", "(C)", " | "], #
          [" | ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", " | "],
          [" | ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", " | "],
-         [" | ", "   ", "[1]", "   ", "[2]", "   ", "[2]", "   ", "[4]", " | "], # # # # # # # # # #
-         [" | ", "[5]", "   ", "[6]", "   ", "[7]", "   ", "[8]", "   ", " | "], # Player 2 Pieces
-         [" | ", "   ", "[9]", "   ", "[A]", "   ", "[B]", "   ", "[C]", " | "], #
+         [" | ", "[1]", "   ", "[2]", "   ", "[2]", "   ", "[4]", "   ", " | "], # # # # # # # # # #
+         [" | ", "   ", "[5]", "   ", "[6]", "   ", "[7]", "   ", "[8]", " | "], # Player 2 Pieces
+         [" | ", "[9]", "   ", "[A]", "   ", "[B]", "   ", "[C]", "   ", " | "], #
          [" - ", " - ", " - ", " - ", " - ", " - ", " - ", " - ", " - ", " - "]]
 boardSize = [10, 10]
 
@@ -32,3 +32,33 @@ piecesPos = [[1, 2], [1, 4], [1, 6], [1, 8], # # # # # # # # # #
              [6, 2], [6, 4], [6, 6], [6, 8], # # # # # # # # # #
              [7, 1], [7, 3], [7, 5], [7, 7], # Player 2 Pieces
              [8, 2], [8, 4], [8, 6], [8, 8],]#
+
+# Checks if the piece can move in the desired direction
+def canMoveCheck(piece, direction)
+    global piecePos
+    global boardSize
+
+    nextPos = piecePos[piece - 1] + direction
+    
+    # Checks if the next spot is off the board
+    if nextPos > boardSize or nextPos < boardSize:
+        print("Your desired move is goes off the board. Please try agian.")
+        return false
+        
+    # Checks if the next spot on the board is occupied
+    elif board[nextPos[0]][nextPos[1]] == "   ":
+        return true
+    
+    # Checks if the spot after that is off the board
+    elif nextPos + direction > boardSize or nextPos + direction < boardSize:
+        print("You cannot move in that direction. Please try agian.")
+        return false
+    
+    # If it is it checks the spot after that
+    elif board[nextPos[0] + direction][nextPos[1] + direction] == "   ":
+        return true
+        
+    # If that is it tells the player it can't move there
+    else:
+        print("You cannot move in that direction. Please try agian.")
+        return false
