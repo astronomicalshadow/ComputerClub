@@ -1,23 +1,33 @@
 # I just use tridecimal counting or something because I was to lazy to figure out what 10, 11, and 12's number should be
 board = [[" - ", " - ", " - ", " - ", " - ", " - ", " - ", " - ", " - ", " - "],
-         [" | ", "   ", "(1)", "   ", "(2)", "   ", "(2)", "   ", "(4)", " | "], # # # # # # # # # #
-         [" | ", "(5)", "   ", "(6)", "   ", "(7)", "   ", "(8)", "   ", " | "], # Player 1  Pieces
-         [" | ", "   ", "(9)", "   ", "(A)", "   ", "(B)", "   ", "(C)", " | "], #
+         [" | ", "   ", "(A)", "   ", "(B)", "   ", "(C)", "   ", "(D)", " | "],  # # # # # # # # # #
+         [" | ", "(E)", "   ", "(F)", "   ", "(G)", "   ", "(H)", "   ", " | "],  # Player 1  Pieces
+         [" | ", "   ", "(I)", "   ", "(J)", "   ", "(K)", "   ", "(L)", " | "],  #
          [" | ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", " | "],
          [" | ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", " | "],
-         [" | ", "   ", "[1]", "   ", "[2]", "   ", "[2]", "   ", "[4]", " | "], # # # # # # # # # #
-         [" | ", "[5]", "   ", "[6]", "   ", "[7]", "   ", "[8]", "   ", " | "], # Player 2 Pieces
-         [" | ", "   ", "[9]", "   ", "[A]", "   ", "[B]", "   ", "[C]", " | "], #
+         [" | ", "[A]", "   ", "[B]", "   ", "[C]", "   ", "[D]", "   ", " | "],  # # # # # # # # # #
+         [" | ", "   ", "[E]", "   ", "[F]", "   ", "[G]", "   ", "[H]", " | "],  # Player 2 Pieces
+         [" | ", "[I]", "   ", "[J]", "   ", "[K]", "   ", "[L]", "   ", " | "],  #
          [" - ", " - ", " - ", " - ", " - ", " - ", " - ", " - ", " - ", " - "]]
 boardSize = [10, 10]
+
+# First 12 positions are player 1's pieces and last 12 positions are player 2's pieces
+# In sub arrays, positions are stored as [y, x]
+piecesPos = [[1, 2], [1, 4], [1, 6], [1, 8],  # # # # # # # # # #
+             [2, 1], [2, 3], [2, 5], [2, 7],  # Player 1 Pieces
+             [3, 2], [3, 4], [3, 6], [3, 8],  #
+             [6, 2], [6, 4], [6, 6], [6, 8],  # # # # # # # # # #
+             [7, 1], [7, 3], [7, 5], [7, 7],  # Player 2 Pieces
+             [8, 2], [8, 4], [8, 6], [8, 8]]  #
 
 # r - row | c - collum
 def draw():
     r = 0
     c = 0
-    
+
     global board
     global boardSize
+    global piecesPos
 
     while r <= boardSize[0]:
         while c <= boardSize[1]:
@@ -27,11 +37,76 @@ def draw():
         r += 1
         print(end="\n")
 
-# First 12 positions are player 1's pieces and last 12 positions are player 2's pieces
-# In sub arrays, positions are stored as [y, x]
-piecesPos = [[1, 2], [1, 4], [1, 6], [1, 8], # # # # # # # # # #
-             [2, 1], [2, 3], [2, 5], [2, 7], # Player 1 Pieces
-             [3, 2], [3, 4], [3, 6], [3, 8], #
-             [6, 2], [6, 4], [6, 6], [6, 8], # # # # # # # # # #
-             [7, 1], [7, 3], [7, 5], [7, 7], # Player 2 Pieces
-             [8, 2], [8, 4], [8, 6], [8, 8],]#
+
+def askMove():
+    playerTurn = "1"
+
+    # move[0] = piece, move[1] = dir, who's move it was
+    move = ["", "", playerTurn]
+
+    if playerTurn == "1":
+        playerInput = input("Player 1, what piece would you like to move and where (Format: \"<piece char> <dir (UL, UR, DL, DR)>\")?\n"
+                            "If you can't move type \"forfeit\". - ")
+
+        move[0] = playerInput[0]
+        move[1] = playerInput[2] + playerInput[3]
+        playerTurn = "2"
+
+    if not playerTurn == "2":
+        playerInput = input("Player 2, what piece would you like to move and where (Format: \"<piece char> <dir (UL, UR, DL, DR)>\")?\n"
+                            "If you can't move type \"forfeit\". - ")
+
+        move[0] = playerInput[0]
+        move[1] = playerInput[2] + playerInput[3]
+        playerTurn = "1"
+
+    return move
+
+
+# Checks if the piece can move in the desired direction
+def canMoveCheck(piece, direction, player):
+    global piecePos
+    global boardSize
+
+    piecesDict = {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "D": 0,
+        "E": 0,
+        "F": 0,
+        "G": 0,
+        "H": 0,
+        "I": 0,
+        "J": 0,
+        "K": 0,
+        "L": 0,
+    }
+
+    if player == "1":
+        nextPos = piecePos[piece] + direction
+    if player == "2":
+        nextPos = piecePos[piece + 12] + direction
+
+    # Checks if the next spot is off the board
+    if nextPos > boardSize or nextPos < boardSize:
+        print("Your desired move is goes off the board. Please try again.")
+        return False
+
+    # Checks if the next spot on the board is occupied
+    elif board[nextPos[0]][nextPos[1]] == "   ":
+        return True
+
+    # Checks if the spot after that is off the board
+    elif nextPos + direction > boardSize or nextPos + direction < boardSize:
+        print("You cannot move in that direction. Please try again.")
+        return False
+
+    # If it is it checks the spot after that
+    elif board[nextPos[0] + direction][nextPos[1] + direction] == "   ":
+        return True
+
+    # If that is it tells the player it can't move there
+    else:
+        print("You cannot move in that direction. Please try again.")
+        return False
