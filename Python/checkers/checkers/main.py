@@ -12,12 +12,15 @@ board = [[" - ", " - ", " - ", " - ", " - ", " - ", " - ", " - ", " - ", " - "],
 boardSize = [10, 10]
 
 # r - row | c - collum
-def draw(r = 0, c = 0):
+def draw():
+    r = 0
+    c = 0
+    
     global board
     global boardSize
 
-    while r < boardSize[0]:
-        while c < boardSize[1]:
+    while r <= boardSize[0]:
+        while c <= boardSize[1]:
             print(board[r][c], end="")
             c += 1
         c = 0
