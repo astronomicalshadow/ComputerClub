@@ -57,6 +57,7 @@
 			checkWin();
 		} // if the cell already has a value do nothing
 	}
+	
 	numberOfMoves = 0;
 	XWin = 0;
 	OWin = 0;
@@ -93,13 +94,31 @@
 		
 		if(XWin == 1){
 			console.log("Player1 wins!");
-			//clearCells();
+			clearCells();
 		} else if (OWin == 1){
 			console.log("Player2 wins!");
-			//clearCells();
+			clearCells();
 		} else if (numberOfMoves == 9){
 			console.log("Tie!");
-			//clearCells();
+			clearCells();
+		}
+		
+	}
+		
+	function clearCells() { // reset variables and cells
+		playerOneCells = [];
+		playerTwoCells = [];
+		var currentLetter = Math.round(Math.random());
+		numberOfMoves = 0;
+		XWin = 0;
+		OWin = 0;
+		splitCells = [];
+		
+		cellNames = ['a1', 'b1', 'c1', 'a2', 'b2', 'c2', 'a3', 'b3', 'c3']
+		for(let i = 0; i < cellNames.length; i++){
+			var cell = document.getElementById(cellNames[i]);
+			cell.textContent = null;
+			cell.value = null;
 		}
 		
 	}
