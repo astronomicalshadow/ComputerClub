@@ -54,8 +54,8 @@
 				playerTwoCells.push(cell.id);
 			}
 			currentLetter = currentLetter + 1 - (2 * currentLetter); // flip one to zero, or zero to one
+			checkWin();
 		} // if the cell already has a value do nothing
-		checkWin();
 	}
 	numberOfMoves = 0;
 	XWin = 0;
