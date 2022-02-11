@@ -16,9 +16,9 @@ boardSize = [10, 10]
 piecesPos = [[1, 2], [1, 4], [1, 6], [1, 8],  # # # # # # # # # #
              [2, 1], [2, 3], [2, 5], [2, 7],  # Player 1 Pieces
              [3, 2], [3, 4], [3, 6], [3, 8],  #
-             [6, 2], [6, 4], [6, 6], [6, 8],  # # # # # # # # # #
-             [7, 1], [7, 3], [7, 5], [7, 7],  # Player 2 Pieces
-             [8, 2], [8, 4], [8, 6], [8, 8]]  #
+             [6, 1], [6, 3], [6, 5], [6, 7],  # # # # # # # # # #
+             [7, 2], [7, 4], [7, 6], [7, 8],  # Player 2 Pieces
+             [8, 1], [8, 5], [8, 5], [8, 7]]  #
 
 # r - row | c - collum
 def draw():
@@ -70,17 +70,17 @@ def canMoveCheck(piece, dir, player):
 
     piecesDict = {
         "A": 0,
-        "B": 0,
-        "C": 0,
-        "D": 0,
-        "E": 0,
-        "F": 0,
-        "G": 0,
-        "H": 0,
-        "I": 0,
-        "J": 0,
-        "K": 0,
-        "L": 0,
+        "B": 1,
+        "C": 2,
+        "D": 3,
+        "E": 4,
+        "F": 5,
+        "G": 6,
+        "H": 7,
+        "I": 8,
+        "J": 9,
+        "K": 10,
+        "L": 11,
     }
     
     dirDict = {
@@ -91,9 +91,14 @@ def canMoveCheck(piece, dir, player):
     }
 
     if player == "1":
-        nextPos = [piecesPos[piece[0]] + dirDict[dir[0]], piecesPos[piece[1]] + dirDict[dir[1]]]
+        nextPos = [0, 0]
+        nextPos[0] = piecesPos[piecesDict[piece]][0] + dirDict[dir][0]
+        nextPos[1] = piecesPos[piecesDict[piece]][1] + dirDict[dir][1]
+
     if player == "2":
-        nextPos = [piecesPos[piece + 12[0]] + dirDict[dir[0]], piecesPos[piece + 12[1]] + dirDict[dir[1]]] 
+        nextPos = [0, 0]
+        nextPos[0] = piecesPos[piecesDict[piece] + 12][0] + dirDict[dir][0]
+        nextPos[1] = piecesPos[piecesDict[piece] + 12][1] + dirDict[dir][1] 
 
     # Checks if the next spot is off the board
     if nextPos > boardSize or nextPos < 0:
@@ -105,12 +110,12 @@ def canMoveCheck(piece, dir, player):
         return True
 
     # Checks if the spot after that is off the board
-    elif nextPos + direction > boardSize or nextPos + direction < 0:
+    elif nextPos + dir > boardSize or nextPos + dir < 0:
         print("You cannot move in that direction. Please try again.")
         return False
 
     # If it is it checks the spot after that
-    elif board[nextPos[0] + direction][nextPos[1] + direction] == "   ":
+    elif board[nextPos[0] + dir][nextPos[1] + dir] == "   ":
         return True
 
     # If that is it tells the player it can't move there
@@ -118,23 +123,24 @@ def canMoveCheck(piece, dir, player):
         print("You cannot move in that direction. Please try again.")
         return False
 
+
 def move(piece, dir, player):
     global piecesPos
     global board
 
     piecesDict = {
         "A": 0,
-        "B": 0,
-        "C": 0,
-        "D": 0,
-        "E": 0,
-        "F": 0,
-        "G": 0,
-        "H": 0,
-        "I": 0,
-        "J": 0,
-        "K": 0,
-        "L": 0,
+        "B": 1,
+        "C": 2,
+        "D": 3,
+        "E": 4,
+        "F": 5,
+        "G": 6,
+        "H": 7,
+        "I": 8,
+        "J": 9,
+        "K": 10,
+        "L": 11,
     }
     
     dirDict = {
@@ -145,16 +151,28 @@ def move(piece, dir, player):
     }
 
     if player == "1":
-        currentPos = [piecesPos[piecesDict[piece][0]], piecesPos[piecesDict[piece][1]]]
-        nextPos = [piecesPos[piecesDict[piece][0]] + dirDict[dir[0]], piecesPos[piecesDict[piece][1]] + dirDict[dir[1]]] 
-    if player == "2":
-        currentPos = [piecesPos[piecesDict[piece + 12][0]], piecesPos[piecesDict[piece + 12[1]]]]
-        nextPos = [piecesPos[piecesDict[piece + 12][0]] + dirDict[dir[0]], piecesPos[piecesDict[piece + 12][1]] + dirDict[dir[1]]] 
+        currentPos = [0, 0]
+        currentPos[0] = piecesPos[piecesDict[piece]][0]
+        currentPos[1] = piecesPos[piecesDict[piece]][1]
 
+        nextPos = [0, 0]
+        nextPos[0] = piecesPos[piecesDict[piece]][0] + dirDict[dir][0]
+        nextPos[1] = piecesPos[piecesDict[piece]][1] + dirDict[dir][1]
+
+    if player == "2":
+        currentPos = [0, 0]
+        currentPos[0] = piecesPos[piecesDict[piece] + 12][0]
+        currentPos[1] = piecesPos[piecesDict[piece] + 12][1]
+
+        nextPos = [0, 0]
+        nextPos[0] = piecesPos[piecesDict[piece] + 12][0] + dirDict[dir][0]
+        nextPos[1] = piecesPos[piecesDict[piece] + 12][1] + dirDict[dir][1]
+    
     board[currentPos[0]][currentPos[1]] = "   "
+    
     if player == "1":
         board[nextPos[0]][nextPos[1]] = "(" + piece + ")"
-        piecesPos[piecesDict[piece]] = currentPos
+        piecesPos[piecesDict[piece]] = nextPos
     else:
         board[nextPos[0]][nextPos[1]] = "[" + piece + "]"
-        piecesPos[piecesDict[piece]] = currentPos
+        piecesPos[piecesDict[piece]] = nextPos
