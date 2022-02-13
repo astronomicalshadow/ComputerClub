@@ -21,22 +21,108 @@
     <div id="center">
         <table id="play">
             <tr>
-                <td><input type="button" value="" onclick="" class="buttons" id="a1"></td>
-                <td><input type="button" value="" onclick="" class="buttons" id="a2"></td>
-                <td><input type="button" value="" onclick="" class="buttons" id="a3"></td>
+                <td><input type="button" value="" onclick="addLetter('a1')" class="buttons" id="a1"></td>
+                <td><input type="button" value="" onclick="addLetter('a2')" class="buttons" id="a2"></td>
+                <td><input type="button" value="" onclick="addLetter('a3')" class="buttons" id="a3"></td>
             </tr>
             <tr>
-                <td><input type="button" value="" onclick="" class="buttons" id="b1"></td>
-                <td><input type="button" value="" onclick="" class="buttons" id="b2"></td>
-                <td><input type="button" value="" onclick="" class="buttons" id="b3"></td>
+                <td><input type="button" value="" onclick="addLetter('b1')" class="buttons" id="b1"></td>
+                <td><input type="button" value="" onclick="addLetter('b2')" class="buttons" id="b2"></td>
+                <td><input type="button" value="" onclick="addLetter('b3')" class="buttons" id="b3"></td>
             </tr>
             <tr>
-                <td><input type="button" value="" onclick="" class="buttons" id="c1"></td>
-                <td><input type="button" value="" onclick="" class="buttons" id="c2"></td>
-                <td><input type="button" value="" onclick="" class="buttons" id="c3"></td>
+                <td><input type="button" value="" onclick="addLetter('c1')" class="buttons" id="c1"></td>
+                <td><input type="button" value="" onclick="addLetter('c2')" class="buttons" id="c2"></td>
+                <td><input type="button" value="" onclick="addLetter('c3')" class="buttons" id="c3"></td>
             </tr>
         </table>    
     </div>
+	
+	<script>
+	playerOneCells = [];
+	playerTwoCells = [];
+	var currentLetter = Math.round(Math.random()); //Choose X or O randomly, X is player1, O is player2, X is zero, O is one.
+	var letters = ['X', 'O'];
+	function addLetter(x){
+		var cell = document.getElementById(x);
+		if (cell.value != 'X' && cell.value != 'O'){
+			cell.textContent = letters[currentLetter];
+			cell.value = letters[currentLetter];
+			if (currentLetter == 0){
+				playerOneCells.push(cell.id);
+			} else {
+				playerTwoCells.push(cell.id);
+			}
+			currentLetter = currentLetter + 1 - (2 * currentLetter); // flip one to zero, or zero to one
+			checkWin();
+		} // if the cell already has a value do nothing
+	}
+	
+	numberOfMoves = 0;
+	XWin = 0;
+	OWin = 0;
+	splitCells = [];
+	function checkWin(){
+		XWin += (playerOneCells.indexOf('a1') > -1 && playerOneCells.indexOf('b2') > -1 && playerOneCells.indexOf('c3') > -1); // Check diagonal from top left to bottom right
+		XWin += (playerOneCells.indexOf('c1') > -1 && playerOneCells.indexOf('b2') > -1 && playerOneCells.indexOf('a3') > -1); // Check diagonal from bottom left to top right
+		OWin += (playerTwoCells.indexOf('a1') > -1 && playerTwoCells.indexOf('b2') > -1 && playerTwoCells.indexOf('c3') > -1);
+		OWin += (playerTwoCells.indexOf('c1') > -1 && playerTwoCells.indexOf('b2') > -1 && playerTwoCells.indexOf('a3') > -1);
+		
+		a = 0; b = 0; c = 0; one = 0; two = 0; thr = 0; // Set counters to 0
+		for(let i = 0; i < playerOneCells.length; i++){ // Count number of a, b, c, 1, 2, and 3
+			a += (2 == playerOneCells[i].split('a').length);
+			b += (2 == playerOneCells[i].split('b').length);
+			c += (2 == playerOneCells[i].split('c').length);
+			one += (2 == playerOneCells[i].split(1).length);
+			two += (2 == playerOneCells[i].split(2).length);
+			thr += (2 == playerOneCells[i].split(3).length);
+		}
+		XWin += (a == 3 || b == 3 || c == 3 || one == 3 || two == 3 || thr == 3); // check for lines (3 of any counter)
+		
+		a = 0; b = 0; c = 0; one = 0; two = 0; thr = 0; 
+		for(let i = 0; i < playerTwoCells.length; i++){ 
+			a += (2 == playerTwoCells[i].split('a').length);
+			b += (2 == playerTwoCells[i].split('b').length);
+			c += (2 == playerTwoCells[i].split('c').length);
+			one += (2 == playerTwoCells[i].split(1).length);
+			two += (2 == playerTwoCells[i].split(2).length);
+			thr += (2 == playerTwoCells[i].split(3).length);
+		}
+		OWin += (a == 3 || b == 3 || c == 3 || one == 3 || two == 3 || thr == 3); 
+		
+		numberOfMoves++;
+		
+		if(XWin == 1){
+			console.log("Player1 wins!");
+			clearCells();
+		} else if (OWin == 1){
+			console.log("Player2 wins!");
+			clearCells();
+		} else if (numberOfMoves == 9){
+			console.log("Tie!");
+			clearCells();
+		}
+		
+	}
+		
+	function clearCells() { // reset variables and cells
+		playerOneCells = [];
+		playerTwoCells = [];
+		var currentLetter = Math.round(Math.random());
+		numberOfMoves = 0;
+		XWin = 0;
+		OWin = 0;
+		splitCells = [];
+		
+		cellNames = ['a1', 'b1', 'c1', 'a2', 'b2', 'c2', 'a3', 'b3', 'c3']
+		for(let i = 0; i < cellNames.length; i++){
+			var cell = document.getElementById(cellNames[i]);
+			cell.textContent = null;
+			cell.value = null;
+		}
+		
+	}
+	</script>
 
     <div id="space"></div>
     
