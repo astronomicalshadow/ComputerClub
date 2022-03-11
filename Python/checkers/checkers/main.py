@@ -68,28 +68,40 @@ def askMove():
     return move
 
 
-# Checks if the piece can move in the desired direction
+piecesDict = {
+    "(A)": 0,
+    "(B)": 1,
+    "(C)": 2,
+    "(D)": 3,
+    "(E)": 4,
+    "(F)": 5,
+    "(G)": 6,
+    "(H)": 7,
+    "(I)": 8,
+    "(J)": 9,
+    "(K)": 10,
+    "(L)": 11,
+    "[A]": 12,
+    "[B]": 13,
+    "[C]": 14,
+    "[D]": 15,
+    "[E]": 16,
+    "[F]": 17,
+    "[G]": 18,
+    "[H]": 19,
+    "[I]": 20,
+    "[J]": 21,
+    "[K]": 22,
+    "[L]": 23,
+}
 
+
+# Checks if the piece can move in the desired direction
 def canMoveCheck(piece, dir, player):
     global piecesPos
-
     global boardSize
-
-    piecesDict = {
-        "A": 0,
-
-        "B": 1,
-        "C": 2,
-        "D": 3,
-        "E": 4,
-        "F": 5,
-        "G": 6,
-        "H": 7,
-        "I": 8,
-        "J": 9,
-        "K": 10,
-        "L": 11,
-    }
+    global piecesDict
+    
     
     dirDict = {
         "UL": [-1, -1],
@@ -98,61 +110,33 @@ def canMoveCheck(piece, dir, player):
         "DR": [1, 1]
     }
 
-    if player == "1":
-        nextPos = [0, 0]
-        nextPos[0] = piecesPos[piecesDict[piece]][0] + dirDict[dir][0]
-        nextPos[1] = piecesPos[piecesDict[piece]][1] + dirDict[dir][1]
+    nextPos = [0, 0]
+    nextPos[0] = [piecesPos[piecesDict[piece]][0] + dirDict[dir][0], [1] = piecesPos[piecesDict[piece]][1] + dirDict[dir][1]]
+    
 
-    if player == "2":
-        nextPos = [0, 0]
-        nextPos[0] = piecesPos[piecesDict[piece] + 12][0] + dirDict[dir][0]
-        nextPos[1] = piecesPos[piecesDict[piece] + 12][1] + dirDict[dir][1] 
-
-    # Checks if the next spot is off the board
+    # 0 - Can't move | 1 - Move | 2 - Jump
     if nextPos > boardSize or nextPos < 0:
-
-        print("Your desired move is goes off the board. Please try again.")
-        return False
-
-    # Checks if the next spot on the board is occupied
-    elif board[nextPos[0]][nextPos[1]] == "   ":
-        return True
-
-    # Checks if the spot after that is off the board
-
-    elif nextPos + dir > boardSize or nextPos + dir < 0:
-        print("You cannot move in that direction. Please try again.")
-        return False
-
-    # If it is it checks the spot after that
-
-    elif board[nextPos[0] + dir][nextPos[1] + dir] == "   ":
-
-        return True
-
-    # If that is it tells the player it can't move there
+        return 0
+    
+    elif board[nextPos[0]][nextPos[1]] == "   "
+        return 1
+    
+    elif nextPos[0] + dir[0] > boardSize[0] or nextPos[0] < 0 or nextPos[1] + dir[1] > boardSize[1] or nextPos[1] < 0:
+        return 0
+    
+    elif board[nextPos[0] + dir[0]][nextPos[1] + dir[0]] == "   "
+        piecesDict.pop(board[nextPos[0]][nextPos[1]])
+        board[nextPos[0]][nextPos[1]] = "   "
+        return 2
+    
     else:
-        print("You cannot move in that direction. Please try again.")
-        return False
-
+        return 0
+    
 def move(piece, dir, player):
     global piecesPos
     global board
-
-    piecesDict = {
-        "A": 0,
-        "B": 1,
-        "C": 2,
-        "D": 3,
-        "E": 4,
-        "F": 5,
-        "G": 6,
-        "H": 7,
-        "I": 8,
-        "J": 9,
-        "K": 10,
-        "L": 11,
-    }
+    global piecesDict
+    
     
     dirDict = {
         "UL": [-1, -1],
@@ -161,23 +145,13 @@ def move(piece, dir, player):
         "DR": [1, 1]
     }
 
-    if player == "1":
-        currentPos = [0, 0]
-        currentPos[0] = piecesPos[piecesDict[piece]][0]
-        currentPos[1] = piecesPos[piecesDict[piece]][1]
 
-        nextPos = [0, 0]
-        nextPos[0] = piecesPos[piecesDict[piece]][0] + dirDict[dir][0]
-        nextPos[1] = piecesPos[piecesDict[piece]][1] + dirDict[dir][1]
+    currentPos = [0, 0]
+    currentPos[0] = [piecesPos[piecesDict[piece]][0], piecesPos[piecesDict[piece]][1]]
 
-    if player == "2":
-        currentPos = [0, 0]
-        currentPos[0] = piecesPos[piecesDict[piece] + 12][0]
-        currentPos[1] = piecesPos[piecesDict[piece] + 12][1]
-
-        nextPos = [0, 0]
-        nextPos[0] = piecesPos[piecesDict[piece] + 12][0] + dirDict[dir][0]
-        nextPos[1] = piecesPos[piecesDict[piece] + 12][1] + dirDict[dir][1]
+    nextPos = [0, 0]
+    nextPos = [piecesPos[piecesDict[piece]][0] + dirDict[dir][0], piecesPos[piecesDict[piece]][1] + dirDict[dir][1]
+    
     
     board[currentPos[0]][currentPos[1]] = "   "
     
